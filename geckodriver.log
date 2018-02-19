@@ -1243,3 +1243,8 @@ Unable to read VR Path Registry from C:\Users\bhask\AppData\Local\openvr\openvrp
 1519042478221	Marionette	INFO	Listening on port 54063
 1519042479220	Marionette	WARN	TLS certificate errors will be ignored for this session
 [Parent 1064, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Child 10300, Chrome_ChildThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+[Parent 1064, Gecko_IOThread] WARNING: pipe error: 109: file z:/build/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 346
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
