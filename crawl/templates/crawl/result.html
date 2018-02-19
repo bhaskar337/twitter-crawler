@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta content="initial-scale=1, minimum-scale=1, width=device-width" name="viewport">
+
+    <title>Search</title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&lang=en" rel="stylesheet">
+    <link href="https://www.google.com/work/search/css/search.min.css" rel="stylesheet">
+
+    <meta content="NOODP,NOYDIR" name="robots">
+</head>
+<style type="text/css">
+
+    body{
+        font-size: 20px !important;
+    }
+
+    form{
+        margin:0px;
+    }
+
+	#res1 {
+		
+		color: #ff3300;
+	}
+
+	#res2 {
+		
+		color: #ff751a;  
+	}
+	#res3 {
+		
+		color: #0066ff;
+	}
+	#res4 {
+		
+		color:  #ffff00;
+	}
+	#res5 {
+		
+		color: #33cc33;
+	}
+
+	.alert{
+	    margin-bottom: 0px;
+	    text-align:left;
+
+	}
+
+	.alert-default{
+	    background-color:lightgrey;
+	}
+
+	span{
+	    display:inline-block !important;
+	    width: 60px !important;
+	    height: 40px !important;
+	}
+</style>
+<body>
+      <div class="centered max-width try-search scroll-section" data-section-label="Try search" style="top:0px;margin:0px;padding:5px;margin-left:210px;">
+          <form method="GET" action="/search" id="search_form" name="search_form">
+              <input data-g-event="Search: Products" data-g-label="Site Search: Sample Search" id="search_term" name="q" placeholder="Enter a search phrase" type="text"><br>
+              <input type="submit" class="maia-button" id="search_submit" type="submit" value="Search">
+          </form>
+      </div>
+
+    <div class="container">
+        <span class="label label-danger"><font size="5"><0.5</font></span>
+        <span class="label label-warning"><font size="5">0.5</font></span>
+        <span class="label label-default"><font size=5">=0</font></span>
+        <span class="label label-info"><font size="5">0</font></span>
+        <span class="label label-success"><font size="5">=0.5</font></span>
+        <br>
+        <h2>TWEETS</h2>
+        {% for tweet in tweets %}
+            <div class="row alert
+            {% if tweet.score >= 0.5 %}
+                alert-success
+            {% elif tweet.score > 0 %}
+                alert-info
+            {% elif tweet.score == 0 %}
+                alert-default
+            {% elif tweet.score >= -0.5 %}
+                alert-warning
+            {% else %}
+                alert-danger
+            {%endif%}">
+                <strong>{{ tweet.by }}</strong><br>
+                <p>{{ tweet.tweet }}</p>
+                <p>SCORE: {{ tweet.score }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
