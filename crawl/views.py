@@ -22,7 +22,7 @@ def search(request):
 
     if request.method == 'GET':
         q = request.GET.get('q')
-        tweets = get_n_tweets(20, q)
+        tweets = get_n_tweets(60, q)
         return render(request, 'crawl/result.html', {'tweets': tweets})
 
     else:
@@ -30,11 +30,11 @@ def search(request):
 
 
 def get_n_tweets(n, search_str='PM MODI'):
-    # driver = webdriver.Firefox(executable_path='geckodriver.exe')
+
     driver.get("http://twitter.com/search?q=" + search_str + "&src=typd")
     for x in range(math.ceil(n / 20) - 1):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(5)
+        time.sleep(2)
 
     try:
         WebDriverWait(driver, 10).until(
@@ -46,13 +46,13 @@ def get_n_tweets(n, search_str='PM MODI'):
         for e_tweet in e_tweets:
             e_fullname = e_tweet.find_element_by_class_name('fullname')
             e_tweet_text = e_tweet.find_element_by_class_name('tweet-text')
-            # print(e_fullname.text, e_tweet_text.text)
+            
+            score = TextBlob(e_tweet_text.text).sentiment.polarity
             response.append({'by': e_fullname.text,
                              'tweet': e_tweet_text.text,
-                             'score': TextBlob(e_tweet_text.text).sentiment.polarity})
+                             'score': round(score, 2)})
 
         return response
 
     finally:
         print('exit()')
-        # driver.quit()
