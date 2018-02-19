@@ -10,34 +10,49 @@ import time
 import math
 from textblob import TextBlob
 
+
 driver = webdriver.Firefox(executable_path='geckodriver.exe')
 
 
 def index(request):
+    return render(request, 'crawl/index.html')
 
-	tweets = get_n_tweets(20)
-	return JsonResponse(tweets, safe=False)
+
+def search(request):
+
+    if request.method == 'GET':
+        q = request.GET.get('q')
+        tweets = get_n_tweets(20, q)
+        return render(request, 'crawl/result.html', {'tweets': tweets})
+
+    else:
+        return HttpResponse('You must send a GET request only')
 
 
 def get_n_tweets(n, search_str='PM MODI'):
-	driver.get("http://twitter.com/search?q="+search_str+"&src=typd")
-	for x in range(math.ceil(n/20)-1):	
-		driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-		time.sleep(5)
+    # driver = webdriver.Firefox(executable_path='geckodriver.exe')
+    driver.get("http://twitter.com/search?q=" + search_str + "&src=typd")
+    for x in range(math.ceil(n / 20) - 1):
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(5)
 
-	try:
-	    element = WebDriverWait(driver, 10).until(
-	        EC.presence_of_element_located((By.CLASS_NAME, "tweet"))
-	    )
-	    tweets = driver.find_elements_by_class_name("tweet")
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "tweet"))
+        )
+        e_tweets = driver.find_elements_by_class_name("tweet")
 
-	    response = []
-	    for i in tweets:
-	    	response.append({'tweet' : i.text, 'score' : TextBlob(i.text).sentiment.polarity})
+        response = []
+        for e_tweet in e_tweets:
+            e_fullname = e_tweet.find_element_by_class_name('fullname')
+            e_tweet_text = e_tweet.find_element_by_class_name('tweet-text')
+            # print(e_fullname.text, e_tweet_text.text)
+            response.append({'by': e_fullname.text,
+                             'tweet': e_tweet_text.text,
+                             'score': TextBlob(e_tweet_text.text).sentiment.polarity})
 
-	    return response
-	    
-	finally:
-		driver.quit()
+        return response
 
-
+    finally:
+        print('exit()')
+        # driver.quit()
